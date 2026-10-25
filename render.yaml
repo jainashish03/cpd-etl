@@ -109,7 +109,6 @@ services:
       url: docker.io/metabase/metabase:latest
     plan: starter
     healthCheckPath: /api/health
-    port: 3000
     envVars:
       - key: MB_DB_TYPE
         value: postgres
