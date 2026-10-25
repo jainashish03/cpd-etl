@@ -69,7 +69,7 @@ services:
         sync: false
       - key: AIRFLOW__WEBSERVER__SECRET_KEY
         generateValue: true
-    startCommand: >-
+    dockerCommand: >-
       bash -c "airflow db migrate && airflow users create --username \"$AIRFLOW_ADMIN_USER\" --password \"$AIRFLOW_ADMIN_PASSWORD\" --firstname Admin --lastname User --role Admin --email admin@example.com || true && airflow webserver --port $PORT"
 
   # ── Airflow scheduler ────────────────────────────────────────────────────────
@@ -79,7 +79,7 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     plan: starter
-    startCommand: airflow scheduler
+    dockerCommand: airflow scheduler
     envVars:
       - key: AIRFLOW__CORE__EXECUTOR
         value: LocalExecutor
