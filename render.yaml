@@ -42,7 +42,6 @@ services:
     dockerContext: .
     plan: starter
     healthCheckPath: /health
-    port: 10000
     envVars:
       - key: AIRFLOW__CORE__EXECUTOR
         value: LocalExecutor
@@ -71,7 +70,7 @@ services:
       - key: AIRFLOW__WEBSERVER__SECRET_KEY
         generateValue: true
     startCommand: >-
-      bash -c "airflow db migrate && airflow users create --username \"$AIRFLOW_ADMIN_USER\" --password \"$AIRFLOW_ADMIN_PASSWORD\" --firstname Admin --lastname User --role Admin --email admin@example.com || true && airflow webserver --port 10000"
+      bash -c "airflow db migrate && airflow users create --username \"$AIRFLOW_ADMIN_USER\" --password \"$AIRFLOW_ADMIN_PASSWORD\" --firstname Admin --lastname User --role Admin --email admin@example.com || true && airflow webserver --port $PORT"
 
   # ── Airflow scheduler ────────────────────────────────────────────────────────
   - type: worker
