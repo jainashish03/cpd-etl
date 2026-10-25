@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: cpd
+          POSTGRES_PASSWORD: cpd_password
+          POSTGRES_DB: postgres_cpd
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U cpd -d postgres_cpd"
+          --health-interval 5s
+          --health-retries 10
+
+    env:
+      CPD_DB_USER: cpd
+      CPD_DB_PASSWORD: cpd_password
+      CPD_DB_NAME: postgres_cpd
+      CPD_DB_HOST: localhost
+      CPD_DB_PORT: 5433
+      SOCRATA_APP_TOKEN: ""
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest --tb=short

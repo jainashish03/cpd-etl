@@ -1,0 +1,23 @@
+# Secrets — never commit
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Airflow local state
+data/
+logs/
+
+# macOS
+.DS_Store
+
+# Docker volumes (local only)
+postgres_data/
