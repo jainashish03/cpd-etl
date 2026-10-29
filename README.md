@@ -4,7 +4,7 @@ Socrata API → (Airflow: extract → transform → load) → PostgreSQL `postgr
 
 Source: https://data.cambridgema.gov/Public-Safety/Daily-Police-Log/3gki-wyrb
 
-## Run it
+## Run locally
 ```bash
 cp .env.example .env          # set AIRFLOW_FERNET_KEY (command is in the file); optionally SOCRATA_APP_TOKEN
 docker compose up -d --build
@@ -18,6 +18,21 @@ docker compose up -d --build
 1. In Airflow, unpause **cpd_daily_police_log** and trigger it once (first run = full load; later runs are incremental).
 2. Metabase → Add database → PostgreSQL → host `postgres_cpd`, port `5432`, db/user/password from `.env`.
 3. Build charts from `sql/metabase_questions.sql` and put them on a dashboard (set auto-refresh to daily).
+
+## Deploy to Google Cloud (remote access from anywhere)
+```bash
+# One-time setup
+brew install --cask google-cloud-sdk   # or: https://cloud.google.com/sdk/docs/install
+gcloud auth login
+gcloud config set project YOUR_PROJECT_ID
+
+# Deploy (~2 min)
+./deploy-gce.sh
+
+# Tear down (deletes VM + firewall rule)
+./deploy-gce.sh teardown
+```
+The script prints the public URLs for Airflow and Metabase when done.
 
 ## Design notes
 - **Idempotent**: `record_id` = hash of incident number + time + offence + street; load is `INSERT … ON CONFLICT DO UPDATE`. Re-runs and overlaps never duplicate.
