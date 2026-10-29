@@ -19,21 +19,6 @@ docker compose up -d --build
 2. Metabase → Add database → PostgreSQL → host `postgres_cpd`, port `5432`, db/user/password from `.env`.
 3. Build charts from `sql/metabase_questions.sql` and put them on a dashboard (set auto-refresh to daily).
 
-## Deploy to Google Cloud (remote access from anywhere)
-```bash
-# One-time setup
-brew install --cask google-cloud-sdk   # or: https://cloud.google.com/sdk/docs/install
-gcloud auth login
-gcloud config set project YOUR_PROJECT_ID
-
-# Deploy (~2 min)
-./deploy-gce.sh
-
-# Tear down (deletes VM + firewall rule)
-./deploy-gce.sh teardown
-```
-The script prints the public URLs for Airflow and Metabase when done.
-
 ## Design notes
 - **Idempotent**: `record_id` = hash of incident number + time + offence + street; load is `INSERT … ON CONFLICT DO UPDATE`. Re-runs and overlaps never duplicate.
 - **Incremental**: watermark = `max(occurred_at)` minus a 7-day look-back (`CPD_LOOKBACK_DAYS`) to catch late-posted entries. Trigger with `{"full_refresh": true}` to reload everything.
