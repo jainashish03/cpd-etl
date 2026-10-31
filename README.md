@@ -13,7 +13,7 @@ docker compose up -d --build
 |----------|------------------------|-------------------------------|
 | Airflow  | http://localhost:8080  | `AIRFLOW_ADMIN_*` from `.env` |
 | Metabase | http://localhost:3000  | created on first visit        |
-| Warehouse| localhost:5433         | `CPD_DB_*` from `.env`        |
+| Warehouse| http://localhost:5433         | `CPD_DB_*` from `.env`        |
 
 1. In Airflow, unpause **cpd_daily_police_log** and trigger it once (first run = full load; later runs are incremental).
 2. Metabase → Add database → PostgreSQL → host `postgres_cpd`, port `5432`, db/user/password from `.env`.

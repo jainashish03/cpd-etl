@@ -100,6 +100,7 @@ services:
     image: metabase/metabase:latest
     ports: [ "3000:3000" ]
     environment:
+      JAVA_OPTS: "-Xmx512m"
       MB_DB_TYPE: postgres
       MB_DB_DBNAME: metabase
       MB_DB_PORT: 5432
